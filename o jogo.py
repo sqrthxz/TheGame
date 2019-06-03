@@ -1,25 +1,27 @@
 import pygame
 pygame.init()
 
-tela = pygame.display.set_mode((500,500)) # set tela + tamanho dela
+tela_w = 600
+tela_h = 600
+tela = pygame.display.set_mode((tela_w,tela_h)) # set tela + tamanho dela
 pygame.display.set_caption('O Jogo') # nome da barrinha
+clock = pygame.time.Clock() #set time
+
 
 # images
-parado = pygame.image.load('images/parado.png')
+parado = pygame.image.load('images/player.png')
 bg = pygame.image.load('images/bg.png')
 
 # set posicao inicial do player
-x = 50
-y = 50
+x = 30
+y = 540
 # set tamanho/velocidade do personagem
 width = 30
 height = 30
-velocidade = 7
+velocidade = 15
 # posicao player
 left = False
 right = False
-front = False
-back = False
 cont = 0
 
 # tempo = pygame.time.Clock() #funcao que define tempo 
@@ -30,6 +32,7 @@ def redrawGameWindow(): #funcao pra set imagens
     tela.blit(bg, (0,0)) # set imagem de fundo do level
     pygame.draw.rect(tela, (255,0,0), (x, y, width, height))  # player
     pygame.display.update() # update da tela
+    clock.tick(60) #fps
 
 
 
@@ -37,7 +40,7 @@ def redrawGameWindow(): #funcao pra set imagens
 run = True
 
 while run:
-    pygame.time.delay(50) # deleio baseado em milisegundos
+    pygame.time.delay(35) # deleio baseado em milisegundos
 
     for event in pygame.event.get():  # loop para verificar cada evento do mouse ou teclado
         if event.type == pygame.QUIT: # verifica se o jogo foi fechado
@@ -57,20 +60,6 @@ while run:
         left = False
         right = True
         front = False
-        back = False
-
-    if teclas[pygame.K_UP] and y > velocidade:
-        y -= velocidade
-        left = False
-        right = False
-        front = False
-        back = True
-        
-    if teclas[pygame.K_DOWN] and y < 500 - velocidade - width:
-        y += velocidade
-        left = False
-        right = False
-        front = True
         back = False
 
     tela.fill((0,0,0))  # reseta a tela para nao ficar marcado o percurso do player
