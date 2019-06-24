@@ -63,6 +63,7 @@ class BOSS(pygame.sprite.Sprite): #set projetil
 
     def put(self,superficie):
         superficie.blit(self.ImageEnemy, self.rect)
+
 class BOSS2(pygame.sprite.Sprite): #set projetil
     def __init__(self, posx, posy):
         pygame.sprite.Sprite.__init__(self)
@@ -73,9 +74,16 @@ class BOSS2(pygame.sprite.Sprite): #set projetil
     def put(self,superficie):
         superficie.blit(self.ImageEnemy, self.rect)
 # ------------------------------------------------------------------------------------
-
-
-
+class BalaB(pygame.sprite.Sprite): #set projetil
+    def __init__(self, posx, posy):
+        pygame.sprite.Sprite.__init__(self)
+        self.ImageEnemy = pygame.image.load("images/laser.png")
+        self.rect = self.ImageEnemy.get_rect()
+        self.rect.top = posy
+        self.rect.left = posx
+    def put(self,superficie):
+        superficie.blit(self.ImageEnemy, self.rect)
+#------------------------------------------------------------------------------------
 class Bala(pygame.sprite.Sprite): #set projetil
     def __init__(self, posx, posy):
         pygame.sprite.Sprite.__init__(self)
@@ -122,7 +130,9 @@ class player(pygame.sprite.Sprite):
 
     def colocar(self, superficie):
         superficie.blit(self.ImagemNave, self.rect)
+#-------------------------------------------------------
 
+#-------------------------------------------------------
 def invasaoEspaco():
     pygame.init()
     tela = pygame.display.set_mode((largura, altura))#tamanho da tela
@@ -145,8 +155,12 @@ def invasaoEspaco():
     boss = BOSS(-100,-100)
     bp= 0
     bm= 135
-    dc= 1
+    le= 1
 
+
+    dc= 1
+    dd= 1
+    de= 1
     fechar= 1
 
     lado1=40
@@ -167,31 +181,29 @@ def invasaoEspaco():
 
     bala = Bala(largura /2, altura - 55)
 
+    bC=0
+    bA=bp+166
+    damage = 0
 
-
-
-
-
-    jogando = True
-
+#----------------------------------------------------------
     vitoria = pygame.image.load("images/vitoria.png")
     bg = pygame.image.load("images/bg.png")
 
+    derrota= pygame.image.load('images/Derrota.png')
+
+#----------------------------------------------------------
     relogio = pygame.time.Clock()
 
-    # def win():
-    #     if ganhar == 11 and len(jogador.listaDisparo) >= 1:
-    #         ctypes.windll.user32.MessageBoxW(0, "You win!", "Congrats!", 1)
-    #         pygame.quit()
 
-    def lose():
-        if e1 > p  or e2 > p or e3 > p or e4 > p or e5 > p or e6 > p or e7> p or e8 > p or e9 > p or e10 > p or e11 > p:
-            ctypes.windll.user32.MessageBoxW(0, "Perdi XD!", "Congrats!", 1)
-            pygame.quit()
+
+
+
     while True:
 
         relogio.tick(60) #fps
         jogador.movimento()
+
+
         #-------------posicao dos inimigos------------
         enemy1 = Enemy3(lado1,e1)
         enemy2 = Enemy2(lado2,e2)
@@ -216,7 +228,16 @@ def invasaoEspaco():
         e9+=con
         e10+=con
         e11+=con
+
         #------------------------------------------------
+        parede1 = Enemy4(-25,120)
+        parede2 = Enemy4(375,120)
+        #-----------------------------------------------
+        bL=bm+62
+        tiro = BalaB(bL,bA)
+
+
+        #-----------------------------------------------
 
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -233,14 +254,41 @@ def invasaoEspaco():
 
 
         bala.trajetoria()
+
         tela.blit(bg,(0,0))
+
+
         jogador.colocar(tela)
+
         if cont == 11:
             boss = BOSS(bm,bp)
             boss.put(tela)
             bp+=dc
-            if bp>50:
+
+            if bp>70:
                 dc=0
+                bm+=le
+                tiro.put(tela)
+                boss.put(tela)
+
+                if boss.rect.colliderect(parede2.rect):
+                    le=-1
+                if boss.rect.colliderect(parede1.rect):
+                    le=1
+
+                bC+=1
+                if bC>5:
+                    bA+=7 #velocidade da bala do boss
+                    if bA>600:
+                        bC=0
+                        bA=bp+50
+                if tiro.rect.colliderect(jogador.rect):
+                    damage+=1
+                    bA=100
+
+
+
+
 
         if ganhar >= 11:
             tela.blit(vitoria,(0,0))
@@ -248,6 +296,7 @@ def invasaoEspaco():
             bm= 5000
             bp= 5000
             fechar +=1
+
             if fechar >= 100:
                 pygame.quit()
 
@@ -262,6 +311,9 @@ def invasaoEspaco():
         enemy9.put(tela)
         enemy10.put(tela)
         enemy11.put(tela)
+#-------------------------------
+
+#------------------------------
 
         #att a tela apos disparo
         if len(jogador.listaDisparo) > 0:
@@ -274,7 +326,7 @@ def invasaoEspaco():
                     cont += 1
                     e1= -10000
                     lado1= 500
-                    con+=0.15
+                    con+=0.30
 
                 elif x.rect.colliderect(enemy2.rect):
 
@@ -282,7 +334,7 @@ def invasaoEspaco():
                     cont += 1
                     e2= -10000
                     lado2= 500
-                    con+=0.15
+                    con+=0.30
 
                 elif x.rect.colliderect(enemy3.rect):
 
@@ -290,7 +342,7 @@ def invasaoEspaco():
                     cont += 1
                     e3= -10000
                     lado3= 500
-                    con+=0.15
+                    con+=0.30
 
                 elif x.rect.colliderect(enemy4.rect):
 
@@ -298,7 +350,7 @@ def invasaoEspaco():
                     cont += 1
                     e4= -10000
                     lado4= 500
-                    con+=0.15
+                    con+=0.30
 
 
                 elif x.rect.colliderect(enemy5.rect):
@@ -307,7 +359,7 @@ def invasaoEspaco():
                     cont += 1
                     e5= -10000
                     lado5= 500
-                    con+=0.15
+                    con+=0.30
 
 
                 elif x.rect.colliderect(enemy6.rect):
@@ -316,7 +368,7 @@ def invasaoEspaco():
                     cont += 1
                     e6= -10000
                     lado6= 500
-                    con+=0.15
+                    con+=0.30
 
 
                 elif x.rect.colliderect(enemy7.rect):
@@ -325,7 +377,7 @@ def invasaoEspaco():
                     cont += 1
                     e7= -10000
                     lado7= 500
-                    con+=0.15
+                    con+=0.30
 
                 elif x.rect.colliderect(enemy8.rect):
 
@@ -333,7 +385,7 @@ def invasaoEspaco():
                     cont += 1
                     lado8= 500
                     e8= -10000
-                    con+=0.15
+                    con+=0.30
 
 
                 elif x.rect.colliderect(enemy9.rect):
@@ -342,7 +394,7 @@ def invasaoEspaco():
                     cont += 1
                     e9= -10000
                     lado9= 500
-                    con+=0.15
+                    con+=0.30
 
 
                 elif x.rect.colliderect(enemy10.rect):
@@ -351,7 +403,7 @@ def invasaoEspaco():
                     cont += 1
                     e10= -10000
                     lado10= 500
-                    con+=0.15
+                    con+=0.30
 
 
                 elif x.rect.colliderect(enemy11.rect):
@@ -360,7 +412,7 @@ def invasaoEspaco():
                     cont += 1
                     e11= -10000
                     lado11= 500
-                    con+=0.15
+                    con+=0.30
 
                 elif x.rect.top < -10:
                     jogador.listaDisparo.remove(x)
@@ -372,9 +424,15 @@ def invasaoEspaco():
 
                         jogador.listaDisparo.remove(x)
                         ganhar+=1
-        # win()
-        lose()
-        pygame.display.update()
 
+        if damage>2 or e1 > p  or e2 > p or e3 > p or e4 > p or e5 > p or e6 > p or e7> p or e8 > p or e9 > p or e10 > p or e11 > p:
+            tela.blit(derrota,(0,0))
+            fechar+=1
+            if fechar>100:
+                pygame.quit()
+
+        pygame.display.update()
+        parede1.put(tela)
+        parede2.put(tela)
 
 invasaoEspaco()
