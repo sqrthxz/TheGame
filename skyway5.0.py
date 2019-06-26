@@ -9,7 +9,7 @@ setTop = 20
 
 # -------------------------------------- INIMIGOS ------------------------------------
 
-class Enemy1(pygame.sprite.Sprite): #set projetil
+class Enemy1(pygame.sprite.Sprite):
     def __init__(self, posx, posy):
         pygame.sprite.Sprite.__init__(self)
         self.ImageEnemy = pygame.image.load("images/enemy1.png")
@@ -31,17 +31,17 @@ class Enemy2(pygame.sprite.Sprite):
     def put(self,superficie):
         superficie.blit(self.ImageEnemy, self.rect)
 
-class Enemy3(pygame.sprite.Sprite): #set projetil
+class Enemy3(pygame.sprite.Sprite):
     def __init__(self, posx, posy):
         pygame.sprite.Sprite.__init__(self)
         self.ImageEnemy = pygame.image.load('images/enemy3.png')
         self.rect = self.ImageEnemy.get_rect()
         self.rect.top = posy
         self.rect.left = posx
-    def put(self,superficie): #coloca img na tela
+    def put(self,superficie):
         superficie.blit(self.ImageEnemy, self.rect)
 
-class Enemy4(pygame.sprite.Sprite): #set projetil
+class Enemy4(pygame.sprite.Sprite):
     def __init__(self, posx, posy):
         pygame.sprite.Sprite.__init__(self)
         self.ImageEnemy = pygame.image.load('images/enemy4.png')
@@ -51,8 +51,9 @@ class Enemy4(pygame.sprite.Sprite): #set projetil
     def put(self,superficie):
         superficie.blit(self.ImageEnemy, self.rect)
 
+#-------------------------------- BOSS ----------------------------------------------
 
-class BOSS(pygame.sprite.Sprite): #set projetil
+class BOSS(pygame.sprite.Sprite):
     def __init__(self, posx, posy):
         pygame.sprite.Sprite.__init__(self)
         self.ImageEnemy = pygame.image.load("images/boss.png")
@@ -63,8 +64,9 @@ class BOSS(pygame.sprite.Sprite): #set projetil
 
     def put(self,superficie):
         superficie.blit(self.ImageEnemy, self.rect)
-
-class BOSS2(pygame.sprite.Sprite): #set projetil
+        
+#quando leva hit
+class BOSS2(pygame.sprite.Sprite):
     def __init__(self, posx, posy):
         pygame.sprite.Sprite.__init__(self)
         self.ImageEnemy = pygame.image.load('images/boss2.png')
@@ -73,18 +75,22 @@ class BOSS2(pygame.sprite.Sprite): #set projetil
         self.rect.left = posx
     def put(self,superficie):
         superficie.blit(self.ImageEnemy, self.rect)
-# ------------------------------------------------------------------------------------
-class BalaB(pygame.sprite.Sprite): #set projetil
+
+#tiro boss
+class BalaB(pygame.sprite.Sprite):
     def __init__(self, posx, posy):
         pygame.sprite.Sprite.__init__(self)
-        self.ImageEnemy = pygame.image.load("images/laser.png")
+        self.ImageEnemy = pygame.image.load("images/laser_boss.png")
         self.rect = self.ImageEnemy.get_rect()
         self.rect.top = posy
         self.rect.left = posx
     def put(self,superficie):
         superficie.blit(self.ImageEnemy, self.rect)
-#------------------------------------------------------------------------------------
-class Bala(pygame.sprite.Sprite): #set projetil
+
+
+#------------------------------------------ PLAYER -----------------------------------------
+#tiro
+class Bala(pygame.sprite.Sprite):
     def __init__(self, posx, posy):
         pygame.sprite.Sprite.__init__(self)
         self.ImagemBala = pygame.image.load("images/laser.png")
@@ -93,17 +99,12 @@ class Bala(pygame.sprite.Sprite): #set projetil
         self.velocidadeBala = 10
         self.rect.top = posy
         self.rect.left = posx
-
-
     def trajetoria(self):
         self.rect.top = self.rect.top - self.velocidadeBala
-
-    def colocar(self,superficie): #coloca img na tela
+    def colocar(self,superficie):
         superficie.blit(self.ImagemBala, self.rect)
 
-
-
-#----------------------------------------------------
+#player
 class player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -113,7 +114,7 @@ class player(pygame.sprite.Sprite):
         #set posicao inicial
         self.rect.centerx = largura/2
         self.rect.centery = altura - 55
-        self.listaDisparo = [] #onde add bullets
+        self.listaDisparo = [] #add balas
         self.vida = True
         self.velocidade= 70 #vel de mov player
 
@@ -130,7 +131,7 @@ class player(pygame.sprite.Sprite):
 
     def colocar(self, superficie):
         superficie.blit(self.ImagemNave, self.rect)
-#-------------------------------------------------------
+
 
 #-----------------------------VARIAVEIS--------------------------
 
@@ -138,7 +139,8 @@ pygame.init()
 tela = pygame.display.set_mode((largura, altura))#tamanho da tela
 pygame.display.set_caption("Skyway")
 cont = 0
-#----------------------altura dos inimigos---------------------------
+
+#---------------------- altura dos inimigos ---------------------------
 e1= -40
 e2= -40
 e3= -40
@@ -151,8 +153,7 @@ e9= -140
 e10= -140
 e11= -140
 
-
-#--------------------posicao dos inimigos----------------------------
+#-------------------- posicao dos inimigos ----------------------------
 lado1=40
 lado2=130
 lado3=220
@@ -164,15 +165,17 @@ lado8=40
 lado9=130
 lado10=220
 lado11=310
-#--------------------------------------------------------------------
 
+#-------------------------- posicao do boss------------------------------------------
 boss = BOSS(-100,-100)
 bp= 0
 bm= 135
 le= 1
+
 #-----------------------velocidade I-------------------------------
 con= 0.20
 vMode=0.15
+
 
 #-------------------------------------------------------------------
 
@@ -184,21 +187,22 @@ fechar= 1
 ganhar= 0
 p= 475 #pos para perder
 
-jogador = player()
+jogador = player() 
 
-bala = Bala(largura /2, altura - 55)
+bala = Bala(largura /2, altura - 55) 
 
 bC=0
 bA=bp+166
 
-damage = 0 #vida do personagem
-vidaboss = 10#vida do boss
+damage = 0  #vida do personagem
+vidaboss = 10 #vida do boss
 
 menucount=0
 menucount1=0
 menucount2=0
 menu=0
-#------------------IMAGENS---------------------------------------
+
+#------------------ IMAGENS ---------------------------------------
 vitoria = pygame.image.load("images/vitoria.png")
 bg = pygame.image.load("images/bg.png")
 menu1= pygame.image.load("images/menu1.png")
@@ -209,13 +213,15 @@ option2=pygame.image.load("images/options2.png")
 normal=pygame.image.load("images/normal.png")
 hard=pygame.image.load("images/hard.png")
 derrota= pygame.image.load('images/Derrota.png')
-
 #----------------------------------------------------------
+
+
 relogio = pygame.time.Clock()
 
 while True:
     relogio.tick(60)
-    #--------menu principal--------------------------------
+    
+    #-------- menu principal --------------------------------
     while menu==0:
 
         if menucount==0:
@@ -237,6 +243,8 @@ while True:
             tela.blit(menu3,(0,0))
             pygame.display.update()
 
+    #----- teclas no menu principal ------------------------------------------
+
         for event in pygame.event.get():
             if event.type== pygame.KEYDOWN:
                 if event.key == K_DOWN :
@@ -250,7 +258,8 @@ while True:
                 if event.key == K_RETURN and menucount==2:
                     pygame.quit()
                     sys.exit()
-    #------------------opcoes------------------------------
+                    
+    #------------------ teclas em opcoes ------------------------------
     while menu==2:
 
         if menucount1==0:
@@ -273,7 +282,8 @@ while True:
                     menu=0
                 if event.key == K_RETURN and menucount1==1:
                     menu=3
-    #---------------dificuldades-----------------------------
+                    
+    #---------------teclas em dificuldades-----------------------------
     while menu==3:
         if menucount2==0:
             tela.blit(normal,(0,0))
@@ -301,7 +311,8 @@ while True:
                     vMode=0.22
                     damage=3
                     vidaboss=20
-    #---------------Jogo-------------------------------------
+                    
+    #--------------- game -------------------------------------
     while menu==1:
 
 
@@ -336,18 +347,16 @@ while True:
         #------------------------------------------------
         parede1 = Enemy4(-25,120)
         parede2 = Enemy4(375,120)
-        #-----------------------------------------------
+        
         bL=bm+62
         tiro = BalaB(bL,bA)
 
-
-        #-----------------------------------------------
-
+        #------------- teclas em jogo ----------------------
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type== pygame.KEYDOWN: #pega tecla pressionada
+            if event.type== pygame.KEYDOWN: 
                 if event.key == K_LEFT :
                     jogador.rect.left -= jogador.velocidade
                 if event.key== K_RIGHT:
@@ -364,6 +373,7 @@ while True:
 
         jogador.colocar(tela)
 
+        # set boss na tela
         if cont == 11:
             boss = BOSS(bm,bp)
             boss.put(tela)
@@ -393,7 +403,7 @@ while True:
 
 
 
-
+        #------- set win -------
         if ganhar >= vidaboss:
             tela.blit(vitoria,(0,0))
             jogador.colocar(tela)
@@ -404,6 +414,10 @@ while True:
             if fechar >= 100:
                 pygame.quit()
 
+
+
+
+        #--- set inimigos na tela ---
         enemy1.put(tela)
         enemy2.put(tela)
         enemy3.put(tela)
@@ -415,11 +429,10 @@ while True:
         enemy9.put(tela)
         enemy10.put(tela)
         enemy11.put(tela)
-#-------------------------------
 
-#------------------------------
+#----------------------------------------------
 
-        #att a tela apos disparo
+        #att a tela apos disparo e verifica colisao dos asteroides
         if len(jogador.listaDisparo) > 0:
             for x in jogador.listaDisparo:
                 x.colocar(tela)
@@ -528,7 +541,9 @@ while True:
 
                         jogador.listaDisparo.remove(x)
                         ganhar+=1
+        #------------------------------------------------------------------
 
+        #---- set derrota ----
         if damage>3 or e1 > p  or e2 > p or e3 > p or e4 > p or e5 > p or e6 > p or e7> p or e8 > p or e9 > p or e10 > p or e11 > p:
             tela.blit(derrota,(0,0))
             fechar+=1
